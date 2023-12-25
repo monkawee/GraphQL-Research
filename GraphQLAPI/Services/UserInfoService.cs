@@ -22,7 +22,7 @@ namespace GraphQLAPI.Services
         }
     }
     #region Mocking Class
-    public class MockingUserInfoService : IUserInfoService
+    public partial class MockingUserInfoService : IUserInfoService
     {
         public List<UserInfo> UserInfoList = new();
         public MockingUserInfoService()
@@ -52,8 +52,8 @@ namespace GraphQLAPI.Services
             userInfo.UserName = userInfo.UserName;
             userInfo.Password = userInfo.Password;
             userInfo.Email = string.IsNullOrWhiteSpace(userInfo.Email) ? $"user{UserInfoList.Count + 1:0#}@company.org" : userInfo.Email;
-            userInfo.MobileNo = string.IsNullOrWhiteSpace(userInfo.MobileNo) ? Regex.Replace("08xxxxxxxx", @"([^0-9])", n => new Random().Next(0, 9).ToString()) : userInfo.MobileNo;
-            userInfo.CitizenID = string.IsNullOrWhiteSpace(userInfo.CitizenID) ? Regex.Replace("xxxxxxxxxxxxx", @"([^0-9])", n => new Random().Next(0, 9).ToString()) : userInfo.CitizenID;
+            userInfo.MobileNo = string.IsNullOrWhiteSpace(userInfo.MobileNo) ? NumberRegex().Replace("08xxxxxxxx", n => new Random().Next(0, 9).ToString()) : userInfo.MobileNo;
+            userInfo.CitizenID = string.IsNullOrWhiteSpace(userInfo.CitizenID) ? NumberRegex().Replace("xxxxxxxxxxxxx", n => new Random().Next(0, 9).ToString()) : userInfo.CitizenID;
             userInfo.Address = string.IsNullOrWhiteSpace(userInfo.Address) ? $"address {UserInfoList.Count + 1:00#}" : userInfo.Address;
             userInfo.LineCommand = userInfo.LineCommand;
             UserInfoList.Add(userInfo);
@@ -67,6 +67,9 @@ namespace GraphQLAPI.Services
             return new string(Enumerable.Repeat(chars, length)
                 .Select(s => s[new Random().Next(s.Length)]).ToArray());
         }
+
+        [GeneratedRegex(@"([^0-9])")]
+        private static partial Regex NumberRegex();
     }
     #endregion
 }
