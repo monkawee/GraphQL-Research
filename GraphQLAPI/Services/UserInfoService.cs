@@ -48,17 +48,16 @@ namespace GraphQLAPI.Services
 
         public UserInfo AddUser(UserInfo userInfo)
         {
-            UserInfoList.Add(new UserInfo
-            {
-                UserID = UserInfoList.Count + 1,
-                UserName = userInfo.UserName,
-                Password = userInfo.Password,
-                Email = string.IsNullOrWhiteSpace(userInfo.Email) ? $"user{UserInfoList.Count + 1:0#}@company.org" : userInfo.Email,
-                MobileNo = string.IsNullOrWhiteSpace(userInfo.MobileNo) ? Regex.Replace("08xxxxxxxx", @"([^0-9])", n => new Random().Next(0, 9).ToString()) : userInfo.MobileNo,
-                CitizenID = string.IsNullOrWhiteSpace(userInfo.CitizenID) ? Regex.Replace("xxxxxxxxxxxxx", @"([^0-9])", n => new Random().Next(0, 9).ToString()) : userInfo.CitizenID,
-                Address = string.IsNullOrWhiteSpace(userInfo.Address) ? $"address {UserInfoList.Count + 1:00#}" : userInfo.Address,
-                LineCommand = userInfo.LineCommand
-            });
+            userInfo.UserID = UserInfoList.Count + 1;
+            userInfo.UserName = userInfo.UserName;
+            userInfo.Password = userInfo.Password;
+            userInfo.Email = string.IsNullOrWhiteSpace(userInfo.Email) ? $"user{UserInfoList.Count + 1:0#}@company.org" : userInfo.Email;
+            userInfo.MobileNo = string.IsNullOrWhiteSpace(userInfo.MobileNo) ? Regex.Replace("08xxxxxxxx", @"([^0-9])", n => new Random().Next(0, 9).ToString()) : userInfo.MobileNo;
+            userInfo.CitizenID = string.IsNullOrWhiteSpace(userInfo.CitizenID) ? Regex.Replace("xxxxxxxxxxxxx", @"([^0-9])", n => new Random().Next(0, 9).ToString()) : userInfo.CitizenID;
+            userInfo.Address = string.IsNullOrWhiteSpace(userInfo.Address) ? $"address {UserInfoList.Count + 1:00#}" : userInfo.Address;
+            userInfo.LineCommand = userInfo.LineCommand;
+            UserInfoList.Add(userInfo);
+
             return userInfo;
         }
 
