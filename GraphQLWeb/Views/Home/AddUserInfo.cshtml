@@ -1,0 +1,103 @@
+﻿@model GraphQLWeb.Models.UserInfo
+
+@{
+    <form asp-action="AddUser" asp-controller="Home" method="post" >
+        <div class="w-50">
+            <div class="row my-1">
+                <div class="col-4 text-end">
+                    User Name: 
+                </div>
+                <div class="col-8">
+                    @Html.TextBoxFor(input => input.UserName, "", new
+                        {
+                            @id = "txtUserName",
+                            @class = "form-control",
+                            @placeholder = "User Name",
+                            @type = "text"
+                        })
+                </div>
+            </div>
+            <div class="row my-1">
+                <div class="col-4 text-end">
+                    Password:
+                </div>
+                <div class="col-8">
+                    @Html.TextBoxFor(input => input.Password, "", new
+                        {
+                            @id = "txtPassword",
+                            @class = "form-control",
+                            @placeholder = "Password",
+                            @type = "password"
+                        })
+                </div>
+            </div>
+            <div class="row my-1">
+                <div class="col-4 text-end">
+                    Email:
+                </div>
+                <div class="col-8">
+                    @Html.TextBoxFor(input => input.Email, "", new
+                        {
+                            @id = "txtEmail",
+                            @class = "form-control",
+                            @placeholder = "E-Mail",
+                            @type = "email"
+                        })
+                </div>
+            </div>
+            <div class="row my-1">
+                <div class="col-4 text-end">
+                    Mobile No:
+                </div>
+                <div class="col-8">
+                    @Html.TextBoxFor(input => input.MobileNo, "", new
+                        {
+                            @id = "txtMobileNo",
+                            @class = "form-control",
+                            @placeholder = "Mobile No.",
+                            @type = "text"
+                        })
+                </div>
+            </div>
+            <div class="row my-1">
+                <div class="col-4 text-end">
+                    Citizen ID:
+                </div>
+                <div class="col-8">
+                    @Html.TextBoxFor(input => input.CitizenID, "", new
+                        {
+                            @id = "txtCitizenId",
+                            @class = "form-control",
+                            @placeholder = "Citizen ID",
+                            @type = "text"
+                        })
+                </div>
+            </div>
+            <div class="row my-1">
+                <div class="col-4 text-end">
+                    Address:
+                </div>
+                <div class="col-8">
+                    @Html.TextBoxFor(input => input.Address, "", new
+                        {
+                            @id = "txtAddress",
+                            @class = "form-control",
+                            @placeholder = "Address",
+                            @type = "text"
+                        })
+                </div>
+            </div>
+            <div class="row my-1">
+                <div class="col-8 offset-4">
+                    <button type="submit" id="btnSubmit" class="btn btn-primary">Add</button>
+                </div>
+            </div>
+        </div>        
+    </form>
+}
+
+@section Scripts {
+    <script>
+
+    </script>
+}

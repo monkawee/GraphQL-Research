@@ -1,0 +1,28 @@
+﻿@model List<GraphQLWeb.Models.UserInfo>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@{
+    if (Model != null || Model?.Count > 0)
+    {
+        <div>
+            @foreach (var user in Model)
+            {
+                <div class="row">
+                    <div class="col">
+                        UserID: @user.UserID, User Name: @user.UserName, Password: @user.Password, Citizen ID: @user.CitizenID, E-mail: @user.Email, Mobile No.: @user.MobileNo, Address: @user.Address
+                    </div>                    
+                </div>
+            }
+        </div>
+    }    
+}
+
+@section Scripts {
+    <script>
+
+    </script>
+}
+
