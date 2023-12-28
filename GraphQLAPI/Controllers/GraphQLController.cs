@@ -72,5 +72,30 @@ namespace GraphQLAPI.Controllers
 
             return new ExecutionResultActionResult(result);
         }
+
+        [HttpGet("UserInfoSubscriptions")]
+        public async Task<IActionResult> UserInfoSubscriptions([FromBody] GraphQLRequest request)
+        {
+            var result = await _documentExecuter.ExecuteAsync(s =>
+            {
+                s.Schema = _schema;
+                s.Query = request.Query;
+                s.Variables = request.Variables;
+                s.OperationName = request.OperationName;
+                s.RequestServices = HttpContext.RequestServices;
+                s.UserContext = new GraphQLUserContext
+                {
+                    User = HttpContext.User,
+                };
+                s.CancellationToken = HttpContext.RequestAborted;
+            });
+
+            if (_graphQLOptions.EnableMetrics)
+            {
+                result.EnrichWithApolloTracing(DateTime.UtcNow);
+            }
+
+            return new ExecutionResultActionResult(result);
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using GraphQL.Transport;
+﻿using GraphQL;
+using GraphQL.Transport;
 using GraphQLWeb.Models;
 using Microsoft.Extensions.Options;
 
@@ -26,7 +27,7 @@ namespace GraphQLWeb.Services
             GraphQLResponse? users = localServiceProvider.PostAsync<GraphQLResponse>($"{appSettings.APIURL}",
                 param: new GraphQLRequest
                 {
-                    Query = "query UserInfo { userInfo { userID userName password email mobileNo ... on UserInformation { citizenID address } } }",
+                    Query = "query UserInfo { userInfo { userID userName password email mobileNo ... on UserInformation { citizenID address lineOfCommand } } }",
                     OperationName = "UserInfo",
                     Variables = null,
                 }).Result;
@@ -39,14 +40,18 @@ namespace GraphQLWeb.Services
         public UserInfo? AddUserInfo(UserInfo userInfo)
         {
             userInfo.UserID = $"{GetUserInfo()?.Count + 1}";
-            string queryParam = $"mutation CreateUser {{ createUser ( user: {{ userName: \"{userInfo.UserName}\" password: \"{userInfo.Password}\" email: \"{userInfo.Email}\" mobileNo: \"{userInfo.MobileNo}\" citizenID: \"{userInfo.CitizenID}\" address: \"{userInfo.Address}\" }} ) {{ userID userName password email mobileNo }} }}";
+            string queryParam = $"mutation CreateUser ( $username: String!, $password: String!, $email: String!, $mobileno: String!, $citizenid: String!, $address: String!, $lineCommand: Int ) {{ createUser ( user: {{ userName: $username password: $password email: $email mobileNo: $mobileno citizenID: $citizenid address: $address lineCommand: $lineCommand }} ) {{ userID userName password email mobileNo citizenID address lineOfCommand }} }}";
+            Dictionary<string, object?> variables = new()
+            {
+                { "variables", userInfo }
+            };
 
             GraphQLResponse? users = localServiceProvider.PostAsync<GraphQLResponse>($"{appSettings.APIURL}",
                 param: new GraphQLRequest
                 {
                     Query = queryParam,
                     OperationName = "CreateUser",
-                    Variables = null,
+                    Variables = new Inputs(variables),
                 }).Result;
 
             if (users == null || users.Data == null) { return null; }

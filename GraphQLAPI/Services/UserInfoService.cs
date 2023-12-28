@@ -6,12 +6,24 @@ namespace GraphQLAPI.Services
     public interface IUserInfoService
     {
         UserInfo AddUser(UserInfo userInfo);
+        List<UserInfo> AddUserGetAll(UserInfo userInfo);
+        UserInfo GetUserInfo(int userid);
         List<UserInfo> GetUserInfoList();
     }
 
     public class UserInfoService : IUserInfoService
     {
         public UserInfo AddUser(UserInfo userInfo)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<UserInfo> AddUserGetAll(UserInfo userInfo)
+        {
+            throw new NotImplementedException();
+        }
+
+        public UserInfo GetUserInfo(int userid)
         {
             throw new NotImplementedException();
         }
@@ -46,6 +58,8 @@ namespace GraphQLAPI.Services
 
         public List<UserInfo> GetUserInfoList() => UserInfoList;
 
+        public UserInfo GetUserInfo(int userid) => UserInfoList.First(user => user.UserID == userid);
+
         public UserInfo AddUser(UserInfo userInfo)
         {
             userInfo.UserID = UserInfoList.Count + 1;
@@ -59,6 +73,12 @@ namespace GraphQLAPI.Services
             UserInfoList.Add(userInfo);
 
             return userInfo;
+        }
+
+        public List<UserInfo> AddUserGetAll(UserInfo userInfo)
+        {
+            AddUser(userInfo);
+            return UserInfoList;
         }
 
         public static string RandomString(int length)

@@ -10,6 +10,7 @@ namespace UserInfoGraphQL
         {
             Query = provider.GetService(typeof(UserInfoQuery)) as UserInfoQuery ?? throw new InvalidOperationException();
             Mutation = provider.GetService(typeof(UserInfoMutation)) as UserInfoMutation ?? throw new InvalidOperationException();
+            Subscription = provider.GetService(typeof(UserInfoSubscription)) as UserInfoSubscription ?? throw new InvalidOperationException();
             FieldMiddleware.Use(new InstrumentFieldsMiddleware());
         }
     }

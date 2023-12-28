@@ -63,6 +63,4 @@ namespace UserInfoGraphQL.Types
             Field(u => u.MobileNo).Description("Mobile No.");
         }
     }
-
-
 }

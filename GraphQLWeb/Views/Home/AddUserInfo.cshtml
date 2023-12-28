@@ -88,6 +88,20 @@
                 </div>
             </div>
             <div class="row my-1">
+                <div class="col-4 text-end">
+                    Address:
+                </div>
+                <div class="col-8">
+                    @Html.TextBoxFor(input => input.LineOfCommand, "", new
+                        {
+                            @id = "txtLineOfCommand",
+                            @class = "form-control",
+                            @placeholder = "Line of Command",
+                            @type = "number"
+                        })
+                </div>
+            </div>
+            <div class="row my-1">
                 <div class="col-8 offset-4">
                     <button type="submit" id="btnSubmit" class="btn btn-primary">Add</button>
                 </div>
