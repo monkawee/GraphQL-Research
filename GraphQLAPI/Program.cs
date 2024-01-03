@@ -1,6 +1,7 @@
 using GraphQL;
 using GraphQL.SystemTextJson;
 using GraphQLAPI.Models;
+using GraphQLAPI.Subscriptions;
 using Microsoft.Extensions.Options;
 using UserInfoGraphQL;
 
@@ -27,6 +28,14 @@ builder.Services.AddGraphQL(b => b
                 .UseMemoryCache()
                 .UseApolloTracing(options => options.RequestServices!.GetRequiredService<IOptions<GraphQLSettings>>().Value.EnableMetrics));
 builder.Services.AddSingleton<AnotherUserInfoData>();
+
+builder.Services.AddGraphQL(b => b
+                .AddSchema<ChatSchema>()
+                .AddSystemTextJson()
+                .AddGraphTypes(typeof(ChatSchema).Assembly)
+                .UseMemoryCache()
+                .UseApolloTracing(options => options.RequestServices!.GetRequiredService<IOptions<GraphQLSettings>>().Value.EnableMetrics));
+builder.Services.AddSingleton<IChat, Chat>();
 
 builder.Services.Configure<GraphQLSettings>(builder.Configuration.GetSection("GraphQLSettings"));
 builder.Services.AddLogging(builder => builder.AddConsole());
@@ -57,8 +66,11 @@ _ = app.UseEndpoints(endpoints =>
         pattern: "{controller=Home}/{action=Index}/{id?}");
 });
 
+app.UseIgnoreDisconnections();  // for subscriptions
+app.UseWebSockets();    // for subscriptions
 app.UseGraphQL<UserInfoSchema>("/graphql/information");
 app.UseGraphQL<AnotherUserInfoSchema>("/graphql/anotherinformation");
+app.UseGraphQL<ChatSchema>("/graphql/chat");
 
 app.UseDefaultFiles();
 app.UseStaticFiles();

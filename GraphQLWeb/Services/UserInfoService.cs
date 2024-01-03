@@ -43,7 +43,13 @@ namespace GraphQLWeb.Services
             string queryParam = $"mutation CreateUser ( $username: String!, $password: String!, $email: String!, $mobileno: String!, $citizenid: String!, $address: String!, $lineCommand: Int ) {{ createUser ( user: {{ userName: $username password: $password email: $email mobileNo: $mobileno citizenID: $citizenid address: $address lineCommand: $lineCommand }} ) {{ userID userName password email mobileNo citizenID address lineOfCommand }} }}";
             Dictionary<string, object?> variables = new()
             {
-                { "variables", userInfo }
+                { "username", userInfo.UserName },
+                { "password", userInfo.Password },
+                { "email", userInfo.Email },
+                { "mobileno", userInfo.MobileNo },
+                { "citizenid", userInfo.CitizenID },
+                { "address", userInfo.Address },
+                { "lineCommand", int.Parse(userInfo.LineOfCommand) },
             };
 
             GraphQLResponse? users = localServiceProvider.PostAsync<GraphQLResponse>($"{appSettings.APIURL}",
