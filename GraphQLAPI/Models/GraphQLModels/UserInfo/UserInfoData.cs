@@ -35,6 +35,17 @@ namespace UserInfoGraphQL
             return Task.FromResult(userInfoService.AddUser(user));
         }
 
+        public string GetLineofCommandByID(UserInfoData data, int lineCommandID)
+        {
+            string? name = data.GetUserInfoByID(lineCommandID)?.Result?.UserName;
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return string.Empty;
+            }
+
+            return name;
+        }
+
         public Task<UserInfo> GetLineOfCommandName(int lineOfCommandID)
         {
             UserInfo lineOfCommandName = userInfoService.GetUserInfoList()
@@ -54,6 +65,30 @@ namespace UserInfoGraphQL
         public Task<List<UserInfo>> AddUserGetAll(UserInfo user)
         {
             return Task.FromResult(userInfoService.AddUserGetAll(user));
+        }
+
+        public IEnumerable<UserInfoClass>? GetUserUnderCommand(UserInfoClass userInfoClass)
+        {
+            if (userInfoClass == null) return null;
+
+            List<UserInfoClass> users = [];
+            int? commander = userInfoClass.UserID;
+
+            if (commander != null)
+            {
+                List<UserInfo> userUnderCommand = userInfoService.GetUserInfoList().Where(cmd => cmd.LineCommand == commander).ToList();
+                foreach (var underCommand in userUnderCommand)
+                {
+                    users.Add(underCommand);
+                }
+            }
+
+            return users;
+        }
+
+        public List<MemberAccount> GetUserAccounts(int userID)
+        {
+            return [];
         }
     }
 }
