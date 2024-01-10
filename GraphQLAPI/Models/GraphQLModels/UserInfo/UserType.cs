@@ -54,14 +54,37 @@ namespace UserInfoGraphQL.Types
             Field(u => u.CitizenID).Description("Citizen ID");
             Field(u => u.Address).Description("Address");
             Field("lineOfCommand", u => data.GetLineofCommandByID(data, u.LineCommand), nullable: true);
-            Field("memberAccount", u => data.GetUserAccounts(u.UserID), nullable: true);
+            Field<ListGraphType<MemberAccountType>>("memberAccount")
+                .ResolveAsync(async context => await data.GetUserAccounts(context.Source));
+
             Interface<UserInfoInterface>();
         }
     }
 
     public class MemberAccountType : ObjectGraphType<MemberAccount>
     {
+        public MemberAccountType(UserInfoData data)
+        {
+            Name = "MemberAccount";
+            Description = "Member Account";
+            Field(acc => acc.AccountID).Description("Account ID");
+            Field(acc => acc.AccountName).Description("Account Name");
+            Field(acc => acc.UUID).Description("Account identity");
+            Field<ListGraphType<BalanceYearType>>("balanceYears")
+                .ResolveAsync(async context => await data.GetBalanceYears(context.Source));
+        }
+    }
 
+    public class BalanceYearType : ObjectGraphType<BalanceYear>
+    {
+        public BalanceYearType()
+        {
+            Name = "BalanceYears";
+            Description = "Balance each year";
+            Field(bl => bl.BalanceYearID).Description("Balance");
+            Field(bl => bl.Year).Description("Year");
+            Field(bl => bl.Balance).Description("Balance");
+        }
     }
 
     public class UserInfoInterface : InterfaceGraphType<UserInfoClass>

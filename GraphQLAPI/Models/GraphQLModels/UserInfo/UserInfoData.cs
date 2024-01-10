@@ -46,49 +46,27 @@ namespace UserInfoGraphQL
             return name;
         }
 
-        public Task<UserInfo> GetLineOfCommandName(int lineOfCommandID)
-        {
-            UserInfo lineOfCommandName = userInfoService.GetUserInfoList()
-                                                       .FirstOrDefault(user => user.UserID == lineOfCommandID) ?? new();
-            return Task.FromResult(lineOfCommandName);
-        }
-
-        public IObservable<List<UserInfo>> SubScribeAllUnderCommand(int userid)
-        {
-            List<UserInfo> userInfoList = userInfoService.GetUserInfoList().Where(user => user.LineCommand == userid).ToList();
-            return Observable.Start(() =>
-            {
-                return userInfoList;
-            });
-        }
-
         public Task<List<UserInfo>> AddUserGetAll(UserInfo user)
         {
             return Task.FromResult(userInfoService.AddUserGetAll(user));
         }
 
-        public IEnumerable<UserInfoClass>? GetUserUnderCommand(UserInfoClass userInfoClass)
+        public Task<List<MemberAccount>>? GetUserAccounts(UserInfo userInfo)
         {
-            if (userInfoClass == null) return null;
+            if (userInfo == null) return null;
+            UserInfo? user = userInfoService.GetUserInfoList().FirstOrDefault(user => user.UserID == userInfo.UserID);
+            if (user == null) return null;
+            List<MemberAccount> accounts = user.MemberAccounts ?? [];
+            if (accounts.Count == 0) return null;
 
-            List<UserInfoClass> users = [];
-            int? commander = userInfoClass.UserID;
-
-            if (commander != null)
-            {
-                List<UserInfo> userUnderCommand = userInfoService.GetUserInfoList().Where(cmd => cmd.LineCommand == commander).ToList();
-                foreach (var underCommand in userUnderCommand)
-                {
-                    users.Add(underCommand);
-                }
-            }
-
-            return users;
+            return Task.FromResult(accounts);
         }
 
-        public List<MemberAccount> GetUserAccounts(int userID)
+        public Task<List<BalanceYear>>? GetBalanceYears(MemberAccount memberAccount)
         {
-            return [];
+            if (memberAccount == null) return null;
+
+            return Task.FromResult(memberAccount.BalanceYears);
         }
     }
 }
